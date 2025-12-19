@@ -1,2 +1,903 @@
-# FUL-smart-shuttle-
-website
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FUL Smart Shuttle - Download App</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    /* Light mode colors - Professional Design System */
+    :root {
+      /* Page and surface separation: make page slightly gray and cards a soft off-white for contrast */
+  --soft-white: #f7f8fa;    /* neutral light (not pure white) used across surfaces */
+      --bg-primary: #eef2f7;    /* page background (soft gray-blue) */
+      --bg-secondary: var(--soft-white);  /* subtle off-white surface color used as default */
+      --card-bg: var(--bg-secondary); /* consistent card surface */
+      --card-border: #e6eef8;   /* subtle card border */
+      --bg-gradient-start: #2563eb;
+      --bg-gradient-end: #1e40af;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-secondary: #3b82f6;
+      --success: #10b981;
+      --border: #e2e8f0;
+      --card-shadow: rgba(15, 23, 42, 0.06);
+      --card-shadow-strong: 0 10px 30px rgba(15,23,42,0.08);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --gap-sm: 12px;
+    }
+    
+    /* Dark mode colors - Professional Design System */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Use deep, slightly-graded surfaces instead of pure black so cards have depth */
+        --bg-primary: #071022;    /* page background */
+        --bg-secondary: #0b1220;  /* card / surface background */
+        --card-bg: #0b1220;       /* explicit card background (alias) */
+        --card-border: #0f1724;   /* card border tone */
+        --bg-gradient-start: #1e293b;
+        --bg-gradient-end: #0f172a;
+        --text-primary: #e6eef8;
+        --text-secondary: #94a3b8;
+        --accent: #3b82f6;
+        --accent-hover: #60a5fa;
+        --accent-secondary: #2563eb;
+        --success: #34d399;
+        --border: #111827;
+        --card-shadow: rgba(2, 6, 23, 0.6);
+        --neon-primary: #2563eb;
+        --neon-secondary: #3b82f6;
+      }
+
+      /* Ensure glass-effect is visibly dark in dark mode */
+      .glass-effect {
+        background: rgba(2,6,23,0.65) !important;
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.04) !important;
+      }
+
+      /* Force common surface components to use the dark surface color (overrides inline var usage if necessary) */
+      .feature-card,
+      .stat-card,
+      .phone-mockup,
+      .clean-shadow,
+      .clean-shadow-lg,
+      .rounded-2xl,
+      .clean-shadow > * {
+        background: var(--card-bg) !important;
+        border-color: var(--card-border) !important;
+        color: var(--text-primary) !important;
+      }
+    }
+    
+    /* Clean professional styles */
+    .clean-border {
+      border: 2px solid var(--accent);
+    }
+    
+    .clean-shadow {
+      box-shadow: 0 4px 6px -1px var(--card-shadow), 
+                  0 2px 4px -1px var(--card-shadow);
+    }
+    
+    .clean-shadow-lg {
+      box-shadow: 0 10px 15px -3px var(--card-shadow), 
+                  0 4px 6px -2px var(--card-shadow);
+    }
+    
+    /* Animated gradient background */
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end), var(--neon-secondary), var(--neon-primary));
+      background-size: 400% 400%;
+      animation: gradient-shift 15s ease infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(5deg); }
+    }
+    
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slide-in-left {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slide-in-right {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { 
+        box-shadow: 0 0 20px var(--neon-primary),
+                    0 0 40px var(--neon-primary);
+      }
+      50% { 
+        box-shadow: 0 0 30px var(--neon-primary),
+                    0 0 60px var(--neon-primary),
+                    0 0 80px var(--neon-secondary);
+      }
+    }
+    
+    @keyframes rotate-border {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .fade-in {
+      animation: fade-in 0.8s ease-out forwards;
+    }
+    
+    .slide-in-left {
+      animation: slide-in-left 0.8s ease-out forwards;
+    }
+    
+    .slide-in-right {
+      animation: slide-in-right 0.8s ease-out forwards;
+    }
+    
+    .phone-mockup {
+      background: var(--bg-secondary);
+      border: 4px solid var(--accent);
+      border-radius: 45px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px var(--card-shadow);
+    }
+    
+    .feature-card {
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--card-shadow-strong);
+      border: 1px solid var(--card-border);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 30px 40px -12px rgba(2,6,23,0.08), 0 12px 20px -8px rgba(2,6,23,0.04);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+    }
+    
+    @media (prefers-color-scheme: light) {
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 23, 42, 0.1);
+      }
+      /* Ensure white text remains readable in light mode: default .text-white becomes primary text color
+         but keep white for intended dark/colored backgrounds (hero, CTAs, accent blocks). */
+      .text-white {
+        color: var(--text-primary) !important;
+      }
+      /* Exceptions: preserve white text on visually dark or colored backgrounds */
+      .gradient-bg .text-white,
+      .cta-primary,
+      .download-btn,
+      .feature-card .text-white,
+      .glass-effect .text-white,
+      [style*="background: var(--accent)"] ,
+      [style*="background: var(--accent)"] .text-white {
+        color: #ffffff !important;
+      }
+
+      /* Make hero text and the 'Learn More' glass button readable in light mode (not pure white) */
+      #hero-title,
+      #hero-description {
+        color: var(--text-primary) !important;
+      }
+
+      /* Target the 'Learn More' glass-effect button specifically so its text and border are visible */
+      button.glass-effect {
+        color: var(--text-primary) !important;
+        border-color: var(--card-border) !important;
+      }
+      button.glass-effect:hover {
+        background: rgba(15,23,42,0.03) !important;
+      }
+
+      /* Make the specific Learn More button blue in light mode with white text for good contrast */
+      #learn-more {
+        background: var(--accent) !important;
+        color: #ffffff !important;
+        border-color: var(--accent-hover) !important;
+        box-shadow: 0 8px 20px -8px rgba(37,99,235,0.25) !important;
+      }
+      #learn-more:hover {
+        background: var(--accent-hover) !important;
+        transform: translateY(-2px) !important;
+      }
+
+      /* Download APK buttons: when NOT a primary CTA, show accent text on the light card background
+         and ensure backgrounds/borders are the soft card surface. Primary CTA (.cta-primary) keeps white text. */
+      a.download-btn:not(.cta-primary),
+      .download-btn:not(.cta-primary) {
+        background-color: var(--card-bg) !important;
+        color: var(--accent) !important;
+        border-color: var(--card-border) !important;
+        box-shadow: var(--card-shadow-strong) !important;
+      }
+
+      /* If a download-btn uses .bg-white previously, ensure its text uses the accent for visibility */
+      .download-btn.bg-white {
+        color: var(--accent) !important;
+        background-color: var(--card-bg) !important;
+      }
+
+      /* Primary CTA download button stays with white text on colored background */
+      .download-btn.cta-primary {
+        color: #ffffff !important;
+      }
+
+      /* Ensure SVG icons that accidentally use .text-white become readable in light mode
+         while preserving white icons inside intentional dark/accent areas (hero, CTAs). */
+      svg.text-white {
+        color: var(--text-primary) !important;
+      }
+      /* Exceptions for SVGs placed on colored/dark backgrounds where white is intended */
+      .gradient-bg svg.text-white,
+      [style*="background: var(--accent)"] svg.text-white,
+      .download-btn.cta-primary svg.text-white,
+      .cta-primary svg.text-white {
+        color: #ffffff !important;
+      }
+      /* Powerful Features: force feature icons to the primary (dark) color in light mode */
+      /* Targets the icon SVGs inside .feature-card blocks so they become visible on the light card background */
+      .feature-card svg,
+      .feature-card .w-14 svg {
+        color: var(--text-primary) !important;
+        fill: currentColor !important;
+        stroke: currentColor !important;
+      }
+    }
+    
+    .download-btn {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .download-btn:hover {
+      transform: scale(1.05) translateY(-2px);
+    }
+    
+    .download-btn:active {
+      transform: scale(0.98) translateY(0);
+    }
+
+    /* Make sure other surface components use the card surface for clear separation in light mode */
+    .stat-card,
+    .phone-mockup,
+    .clean-shadow,
+    .clean-shadow-lg,
+    .rounded-2xl,
+    .clean-shadow > * {
+      background: var(--card-bg) !important;
+      border-color: var(--card-border) !important;
+      box-shadow: var(--card-shadow-strong) !important;
+      color: var(--text-primary) !important;
+    }
+
+    /* Override Tailwind's bg-white utility and common literal white backgrounds in light mode */
+    .bg-white {
+      background-color: var(--card-bg) !important;
+    }
+    /* Catch common inline background literals that use white or #fff variants */
+    [style*="#fff"] {
+      background-color: var(--card-bg) !important;
+    }
+    [style*="#ffffff"] {
+      background-color: var(--card-bg) !important;
+    }
+    [style*="background: white"] {
+      background-color: var(--card-bg) !important;
+    }
+    [style*="background-color: white"] {
+      background-color: var(--card-bg) !important;
+    }
+    [style*="background-color: #ffffff"] {
+      background-color: var(--card-bg) !important;
+    }
+
+    /* Accessible focus styles */
+    .download-btn:focus-visible,
+    .cta-primary:focus-visible,
+    .feature-card:focus-visible {
+      outline: 3px solid rgba(37,99,235,0.18);
+      outline-offset: 3px;
+    }
+    
+    .cta-primary {
+      background: var(--accent);
+      box-shadow: 0 8px 20px -8px rgba(37,99,235,0.45);
+    }
+    
+    .cta-primary:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 10px 15px -3px var(--card-shadow), 0 4px 6px -2px var(--card-shadow);
+    }
+    
+    .stat-card {
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Particle effect background */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--neon-primary);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float-particle 20s infinite;
+    }
+    
+    @keyframes float-particle {
+      0% {
+        transform: translateY(100%) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px);
+        opacity: 0;
+      }
+    }
+    
+    /* Responsive utilities */
+    @media (max-width: 768px) {
+      .phone-mockup {
+        width: 240px !important;
+        height: 480px !important;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .phone-mockup {
+        width: 200px !important;
+        height: 400px !important;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full h-full overflow-auto"><!-- Header -->
+   <header class="w-full sticky top-0 z-50 backdrop-blur-lg border-b clean-shadow" style="background: var(--bg-primary); border-color: var(--border);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 sm:gap-3">
+       <svg class="w-8 h-8 sm:w-10 sm:h-10" style="color: var(--accent);" viewbox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="30" height="24" rx="4" stroke="currentColor" stroke-width="2.5" /> <path d="M5 15h30M11 8v-3M29 8v-3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" /> <circle cx="20" cy="20" r="3" fill="currentColor" /> <path d="M20 23v6M17 29h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+       </svg>
+       <div>
+        <h1 id="app-name" class="text-lg sm:text-xl font-bold" style="color: var(--text-primary);">FUL Smart Shuttle</h1>
+        <p id="tagline" class="text-xs hidden sm:block" style="color: var(--text-secondary);">Track. Plan. Travel.</p>
+       </div>
+      </div><a href="#download" class="px-4 sm:px-6 py-2 rounded-full font-semibold text-white download-btn text-sm sm:text-base" style="background: var(--accent);">Download</a>
+     </div>
+    </div>
+   </header><!-- Hero Section -->
+   <section class="w-full py-12 sm:py-16 lg:py-20 relative overflow-hidden gradient-bg">
+    <div class="particles">
+     <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+     <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+     <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+     <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+     <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+     <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+     <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+     <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+     <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div class="slide-in-left text-center lg:text-left">
+       <h2 id="hero-title" class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight text-white">Never Miss Your Shuttle Again</h2>
+       <p id="hero-description" class="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 leading-relaxed text-white opacity-90">Real-time GPS tracking for shuttles between Adankolo and Felele campus. Know exactly when your ride arrives.</p>
+       <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start"><a href="#download" class="px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-white text-base sm:text-lg download-btn cta-primary flex items-center justify-center gap-2">
+         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M17.6,9.48l1.84-3.18c0.16-0.31,0.04-0.69-0.26-0.85c-0.29-0.15-0.65-0.06-0.83,0.22l-1.88,3.24 c-2.86-1.21-6.08-1.21-8.94,0L5.65,5.67c-0.19-0.29-0.58-0.38-0.87-0.2C4.5,5.65,4.41,6.01,4.56,6.3L6.4,9.48 C3.3,11.25,1.28,14.44,1,18h22C22.72,14.44,20.7,11.25,17.6,9.48z M7,15.25c-0.69,0-1.25-0.56-1.25-1.25 c0-0.69,0.56-1.25,1.25-1.25S8.25,13.31,8.25,14C8.25,14.69,7.69,15.25,7,15.25z M17,15.25c-0.69,0-1.25-0.56-1.25-1.25 c0-0.69,0.56-1.25,1.25-1.25s1.25,0.56,1.25,1.25C18.25,14.69,17.69,15.25,17,15.25z" />
+      </svg><span id="download-button-text">Download for Android</span> </a> <button id="learn-more" class="px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold border-2 glass-effect hover:bg-opacity-30 transition-all text-white border-white border-opacity-30 text-base sm:text-lg"> Learn More </button>
+       </div><!-- Stats -->
+       <div class="grid grid-cols-3 gap-3 sm:gap-4 mt-8 sm:mt-12">
+       </div>
+      </div>
+      <div class="flex justify-center slide-in-right">
+       <div class="float-animation">
+        <div class="phone-mockup" style="width: 280px; height: 560px;">
+         <div class="w-full h-full rounded-3xl overflow-hidden" style="background: var(--bg-primary);"><!-- Mock App Screen -->
+          <div class="p-4 h-full flex flex-col">
+           <div class="flex items-center justify-between mb-4">
+            <div class="text-xs font-semibold" style="color: var(--text-primary);">
+             Live Tracking
+            </div>
+            <div class="w-2 h-2 rounded-full animate-pulse" style="background: #10b981;"></div>
+           </div>
+           <div class="flex-1 rounded-2xl mb-4 relative overflow-hidden border-2" style="background: var(--bg-secondary); border-color: var(--border);">
+            <div class="absolute inset-0 flex items-center justify-center">
+             <svg class="w-16 h-16 opacity-30" style="color: var(--accent);" viewbox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor" />
+             </svg>
+            </div>
+           </div>
+           <div class="space-y-2">
+            <div class="p-3 rounded-xl" style="background: var(--accent);">
+             <div class="text-white text-xs font-semibold mb-1">
+              Shuttle A - Adankolo
+             </div>
+             <div class="text-white text-xs opacity-90">
+              Arriving in 4 minutes
+             </div>
+            </div>
+            <div class="p-3 rounded-xl border-2" style="background: var(--bg-secondary); border-color: var(--border);">
+             <div class="text-xs font-semibold mb-1" style="color: var(--text-primary);">
+              Shuttle B - Felele
+             </div>
+             <div class="text-xs" style="color: var(--text-secondary);">
+              Arriving in 12 minutes
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Features Section -->
+   <section class="w-full py-12 sm:py-16 lg:py-20" style="background: var(--bg-primary);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <h2 id="features-title" class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 lg:mb-16" style="color: var(--text-primary);">Powerful Features</h2>
+     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"><!-- Feature 1 -->
+      <div class="feature-card p-6 sm:p-8 rounded-2xl" style="background: var(--bg-secondary);">
+       <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background: var(--accent);">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+       </div>
+       <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style="color: var(--text-primary);">Live GPS Tracking</h3>
+       <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Track shuttle locations in real-time using driver's phone GPS. See exact positions on the map as shuttles move between Adankolo and Felele campus.</p>
+      </div><!-- Feature 2 -->
+      <div class="feature-card p-6 sm:p-8 rounded-2xl" style="background: var(--bg-secondary);">
+       <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background: var(--accent);">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style="color: var(--text-primary);">Accurate ETA</h3>
+       <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Get precise arrival time estimates based on current traffic and route conditions. Plan your schedule with confidence.</p>
+      </div><!-- Feature 3 -->
+      <div class="feature-card p-6 sm:p-8 rounded-2xl" style="background: var(--bg-secondary);">
+       <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background: var(--accent);">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+       </div>
+       <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style="color: var(--text-primary);">Smart Notifications</h3>
+       <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Receive push notifications when your shuttle is approaching. Never miss your ride with timely alerts.</p>
+      </div><!-- Feature 4 -->
+      <div class="feature-card p-6 sm:p-8 rounded-2xl" style="background: var(--bg-secondary);">
+       <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background: var(--accent);">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+       </div>
+       <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style="color: var(--text-primary);">Events Screen</h3>
+       <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Stay updated with campus events, shuttle schedule changes, and important announcements all in one place.</p>
+      </div><!-- Feature 5 -->
+      <div class="feature-card p-6 sm:p-8 rounded-2xl" style="background: var(--bg-secondary);">
+       <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background: var(--accent);">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+       </div>
+       <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style="color: var(--text-primary);">Customizable Settings</h3>
+       <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">Personalize your experience with theme options, notification preferences, favorite routes, and auto dark mode support.</p>
+      </div><!-- Feature 6 -->
+      <div class="feature-card p-6 sm:p-8 rounded-2xl" style="background: var(--bg-secondary);">
+       <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background: var(--accent);">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+       </div>
+       <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4" style="color: var(--text-primary);">Route Analytics</h3>
+       <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">View shuttle capacity, peak hours, and travel patterns to choose the best time for your commute.</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Routes Section -->
+   <section class="w-full py-12 sm:py-16 lg:py-20" style="background: var(--bg-secondary);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <h2 id="routes-title" class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 lg:mb-16" style="color: var(--text-primary);">Campus Routes Covered</h2>
+     <div class="grid lg:grid-cols-2 gap-8 sm:gap-12"><!-- Adankolo Campus -->
+      <div class="p-6 sm:p-8 rounded-2xl clean-shadow border-2" style="background: var(--bg-primary); border-color: var(--border);">
+       <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg sm:text-xl" style="background: var(--accent);">
+         A
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary);">Adankolo Campus</h3>
+       </div>
+       <ul class="space-y-2 sm:space-y-3">
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Main Gate - Adankolo</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Student Hostels Area</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> University Library</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Administrative Block</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Sports Complex</li>
+       </ul>
+       <p class="text-xs sm:text-sm opacity-75 mt-4 sm:mt-6 font-semibold" style="color: var(--text-secondary);">Frequency: Every 15 minutes</p>
+      </div><!-- Felele Campus -->
+      <div class="p-6 sm:p-8 rounded-2xl clean-shadow border-2" style="background: var(--bg-primary); border-color: var(--border);">
+       <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg sm:text-xl" style="background: var(--accent);">
+         F
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary);">Felele Campus</h3>
+       </div>
+       <ul class="space-y-2 sm:space-y-3">
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Main Gate - Felele</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Engineering Faculty</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Science Complex</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Cafeteria &amp; Student Center</li>
+        <li class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base" style="color: var(--text-secondary);">
+         <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 neon-glow" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg> Lecture Halls Complex</li>
+       </ul>
+       <p class="text-xs sm:text-sm opacity-75 mt-4 sm:mt-6 font-semibold" style="color: var(--text-secondary);">Frequency: Every 20 minutes</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- App Screenshots Section -->
+   <section class="w-full py-12 sm:py-16 lg:py-20" style="background: var(--bg-primary);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <h2 id="screenshots-title" class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 lg:mb-16" style="color: var(--text-primary);">App Screenshots</h2>
+     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"><!-- Screenshot 1 - Tracking -->
+      <div class="rounded-2xl overflow-hidden clean-shadow border-2" style="background: var(--bg-secondary); border-color: var(--border);">
+       <div class="aspect-[9/16] p-3 sm:p-4">
+        <div class="w-full h-full rounded-xl flex flex-col border-2" style="background: var(--bg-primary); border-color: var(--border);">
+         <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-bold border-b" style="color: var(--text-primary); border-color: var(--border);">
+          Live Tracking
+         </div>
+         <div class="flex-1 flex items-center justify-center">
+          <svg class="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 opacity-30" style="color: var(--accent);" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg>
+         </div>
+        </div>
+       </div>
+       <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-semibold" style="color: var(--text-primary);">
+        Real-time Map
+       </div>
+      </div><!-- Screenshot 2 - Events -->
+      <div class="rounded-2xl overflow-hidden clean-shadow border-2" style="background: var(--bg-secondary); border-color: var(--border);">
+       <div class="aspect-[9/16] p-3 sm:p-4">
+        <div class="w-full h-full rounded-xl flex flex-col border-2" style="background: var(--bg-primary); border-color: var(--border);">
+         <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-bold border-b" style="color: var(--text-primary); border-color: var(--border);">
+          Events
+         </div>
+         <div class="flex-1 p-2 sm:p-3 space-y-1 sm:space-y-2">
+          <div class="p-1.5 sm:p-2 rounded" style="background: var(--bg-secondary);">
+           <div class="text-xs font-semibold mb-0.5 sm:mb-1" style="color: var(--text-primary);">
+            Campus Event
+           </div>
+           <div class="text-xs" style="color: var(--text-secondary);">
+            Today, 2:00 PM
+           </div>
+          </div>
+          <div class="p-1.5 sm:p-2 rounded" style="background: var(--bg-secondary);">
+           <div class="text-xs font-semibold mb-0.5 sm:mb-1" style="color: var(--text-primary);">
+            Schedule Change
+           </div>
+           <div class="text-xs" style="color: var(--text-secondary);">
+            Tomorrow
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-semibold" style="color: var(--text-primary);">
+        Events Feed
+       </div>
+      </div><!-- Screenshot 3 - Settings -->
+      <div class="rounded-2xl overflow-hidden clean-shadow border-2" style="background: var(--bg-secondary); border-color: var(--border);">
+       <div class="aspect-[9/16] p-3 sm:p-4">
+        <div class="w-full h-full rounded-xl flex flex-col border-2" style="background: var(--bg-primary); border-color: var(--border);">
+         <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-bold border-b" style="color: var(--text-primary); border-color: var(--border);">
+          Settings
+         </div>
+         <div class="flex-1 p-2 sm:p-3 space-y-2 sm:space-y-3">
+          <div class="flex items-center justify-between"><span class="text-xs" style="color: var(--text-primary);">Notifications</span>
+           <div class="w-6 h-3 sm:w-8 sm:h-4 rounded-full" style="background: var(--accent);"></div>
+          </div>
+          <div class="flex items-center justify-between"><span class="text-xs" style="color: var(--text-primary);">Dark Mode</span>
+           <div class="w-6 h-3 sm:w-8 sm:h-4 rounded-full" style="background: var(--accent);"></div>
+          </div>
+          <div class="flex items-center justify-between"><span class="text-xs" style="color: var(--text-primary);">Auto Theme</span>
+           <div class="w-6 h-3 sm:w-8 sm:h-4 rounded-full" style="background: var(--accent);"></div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-semibold" style="color: var(--text-primary);">
+        Preferences
+       </div>
+      </div><!-- Screenshot 4 - Routes -->
+      <div class="rounded-2xl overflow-hidden clean-shadow border-2" style="background: var(--bg-secondary); border-color: var(--border);">
+       <div class="aspect-[9/16] p-3 sm:p-4">
+        <div class="w-full h-full rounded-xl flex flex-col border-2" style="background: var(--bg-primary); border-color: var(--border);">
+         <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-bold border-b" style="color: var(--text-primary); border-color: var(--border);">
+          Routes
+         </div>
+         <div class="flex-1 p-2 sm:p-3 space-y-1 sm:space-y-2">
+          <div class="p-1.5 sm:p-2 rounded flex items-center gap-1 sm:gap-2" style="background: var(--accent);">
+           <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold" style="color: var(--accent);">
+            A
+           </div><span class="text-xs text-white font-semibold">Adankolo</span>
+          </div>
+          <div class="p-1.5 sm:p-2 rounded flex items-center gap-1 sm:gap-2 border" style="background: var(--bg-secondary); border-color: var(--border);">
+           <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-xs font-bold text-white" style="background: var(--accent);">
+            F
+           </div><span class="text-xs font-semibold" style="color: var(--text-primary);">Felele</span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="p-2 sm:p-3 text-center text-xs sm:text-sm font-semibold" style="color: var(--text-primary);">
+        Route List
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Download Section -->
+   <section id="download" class="w-full py-12 sm:py-16 lg:py-20 relative overflow-hidden gradient-bg">
+    <div class="particles">
+     <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+     <div class="particle" style="left: 35%; animation-delay: 3s;"></div>
+     <div class="particle" style="left: 55%; animation-delay: 1.5s;"></div>
+     <div class="particle" style="left: 75%; animation-delay: 4s;"></div>
+     <div class="particle" style="left: 85%; animation-delay: 2s;"></div>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+     <h2 id="download-section-title" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">Download the App Today</h2>
+     <p class="text-base sm:text-lg lg:text-xl text-white opacity-90 mb-8 sm:mb-12">Available for Android devices. Start tracking your shuttle now!</p>
+     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"><a href="#" target="_blank" rel="noopener noreferrer" class="download-btn px-8 sm:px-12 py-5 sm:py-6 bg-white rounded-2xl font-bold text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 clean-shadow-lg" style="color: var(--accent);">
+       <svg class="w-7 h-7 sm:w-9 sm:h-9" fill="currentColor" viewbox="0 0 24 24"><path d="M17.6,9.48l1.84-3.18c0.16-0.31,0.04-0.69-0.26-0.85c-0.29-0.15-0.65-0.06-0.83,0.22l-1.88,3.24 c-2.86-1.21-6.08-1.21-8.94,0L5.65,5.67c-0.19-0.29-0.58-0.38-0.87-0.2C4.5,5.65,4.41,6.01,4.56,6.3L6.4,9.48 C3.3,11.25,1.28,14.44,1,18h22C22.72,14.44,20.7,11.25,17.6,9.48z M7,15.25c-0.69,0-1.25-0.56-1.25-1.25 c0-0.69,0.56-1.25,1.25-1.25S8.25,13.31,8.25,14C8.25,14.69,7.69,15.25,7,15.25z M17,15.25c-0.69,0-1.25-0.56-1.25-1.25 c0-0.69,0.56-1.25,1.25-1.25s1.25,0.56,1.25,1.25C18.25,14.69,17.69,15.25,17,15.25z" />
+       </svg>
+       <div class="text-left">
+        <div class="text-xs opacity-70 uppercase tracking-wide">
+         Get it on
+        </div>
+        <div class="text-lg sm:text-xl font-bold">
+         Your Android Device
+        </div>
+       </div></a> <a href="#" class="download-btn px-8 sm:px-12 py-5 sm:py-6 border-3 glass-effect text-white rounded-2xl font-bold text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 border-white border-opacity-40">
+       <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+       </svg><span class="font-bold">Download APK</span> </a>
+     </div>
+     <p class="text-white opacity-75 mt-6 sm:mt-8 text-sm sm:text-base">iOS version coming soon!</p>
+    </div>
+   </section><!-- Footer -->
+   <footer class="w-full py-6 sm:py-8 border-t" style="background: var(--bg-primary); border-color: var(--border);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center">
+      <p class="font-semibold mb-2 text-sm sm:text-base" style="color: var(--text-primary);">FUL Smart Shuttle Tracker</p>
+      <p class="text-xs sm:text-sm mb-3 sm:mb-4" style="color: var(--text-secondary);">Federal University Lokoja Transportation Services</p>
+      <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">© 2024 FUL. All rights reserved.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+  background_color_light: '#f7f8fa',
+      background_color_dark: '#0f172a',
+      surface_color_light: '#f8fafc',
+      surface_color_dark: '#1e293b',
+      text_color_light: '#1e293b',
+      text_color_dark: '#f1f5f9',
+      accent_color: '#2563eb',
+      font_family: 'system-ui',
+      font_size: 16,
+      app_name: 'FUL Smart Shuttle',
+      tagline: 'Track. Plan. Travel.',
+      hero_title: 'Never Miss Your Shuttle Again',
+      hero_description: 'Real-time GPS tracking for shuttles between Adankolo and Felele campus. Know exactly when your ride arrives.',
+      download_button_text: 'Download for Android',
+      features_title: 'Powerful Features',
+      routes_title: 'Campus Routes Covered',
+      screenshots_title: 'App Screenshots',
+      download_section_title: 'Download the App Today'
+    };
+
+    async function onConfigChange(config) {
+      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      const backgroundColor = isDarkMode 
+        ? (config.background_color_dark || defaultConfig.background_color_dark)
+        : (config.background_color_light || defaultConfig.background_color_light);
+      
+      const surfaceColor = isDarkMode
+        ? (config.surface_color_dark || defaultConfig.surface_color_dark)
+        : (config.surface_color_light || defaultConfig.surface_color_light);
+      
+      const textColor = isDarkMode
+        ? (config.text_color_dark || defaultConfig.text_color_dark)
+        : (config.text_color_light || defaultConfig.text_color_light);
+      
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+
+      // Update CSS variables
+      document.documentElement.style.setProperty('--bg-primary', backgroundColor);
+      document.documentElement.style.setProperty('--bg-secondary', surfaceColor);
+      document.documentElement.style.setProperty('--text-primary', textColor);
+      document.documentElement.style.setProperty('--accent', accentColor);
+      document.documentElement.style.setProperty('--neon-primary', accentColor);
+
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      const fontStack = `${fontFamily}, ${baseFontStack}`;
+      document.body.style.fontFamily = fontStack;
+
+      // Apply font sizes
+      const h2Elements = document.querySelectorAll('h2');
+      h2Elements.forEach(el => {
+        if (el.id === 'hero-title') {
+          el.style.fontSize = `${fontSize * 3.125}px`;
+        } else {
+          el.style.fontSize = `${fontSize * 2.5}px`;
+        }
+      });
+
+      const h3Elements = document.querySelectorAll('h3');
+      h3Elements.forEach(el => {
+        el.style.fontSize = `${fontSize * 1.5}px`;
+      });
+
+      document.querySelectorAll('p, span, li, a, button').forEach(el => {
+        if (!el.closest('h1, h2, h3')) {
+          el.style.fontSize = `${fontSize}px`;
+        }
+      });
+
+      document.getElementById('app-name').style.fontSize = `${fontSize * 1.25}px`;
+      document.getElementById('tagline').style.fontSize = `${fontSize * 0.75}px`;
+      document.getElementById('hero-description').style.fontSize = `${fontSize * 1.25}px`;
+
+      // Apply text content
+      document.getElementById('app-name').textContent = config.app_name || defaultConfig.app_name;
+      document.getElementById('tagline').textContent = config.tagline || defaultConfig.tagline;
+      document.getElementById('hero-title').textContent = config.hero_title || defaultConfig.hero_title;
+      document.getElementById('hero-description').textContent = config.hero_description || defaultConfig.hero_description;
+      document.getElementById('download-button-text').textContent = config.download_button_text || defaultConfig.download_button_text;
+      document.getElementById('features-title').textContent = config.features_title || defaultConfig.features_title;
+      document.getElementById('routes-title').textContent = config.routes_title || defaultConfig.routes_title;
+      document.getElementById('screenshots-title').textContent = config.screenshots_title || defaultConfig.screenshots_title;
+      document.getElementById('download-section-title').textContent = config.download_section_title || defaultConfig.download_section_title;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['app_name', config.app_name || defaultConfig.app_name],
+        ['tagline', config.tagline || defaultConfig.tagline],
+        ['hero_title', config.hero_title || defaultConfig.hero_title],
+        ['hero_description', config.hero_description || defaultConfig.hero_description],
+        ['download_button_text', config.download_button_text || defaultConfig.download_button_text],
+        ['features_title', config.features_title || defaultConfig.features_title],
+        ['routes_title', config.routes_title || defaultConfig.routes_title],
+        ['screenshots_title', config.screenshots_title || defaultConfig.screenshots_title],
+        ['download_section_title', config.download_section_title || defaultConfig.download_section_title]
+      ]);
+    }
+
+    // Listen for theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (window.elementSdk && window.elementSdk.config) {
+        onConfigChange(window.elementSdk.config);
+      } else {
+        onConfigChange(defaultConfig);
+      }
+    });
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Initial render
+    onConfigChange(defaultConfig);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b02de7b92648560',t:'MTc2NjEwNTA0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>s
